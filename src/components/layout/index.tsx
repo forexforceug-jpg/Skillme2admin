@@ -1,34 +1,38 @@
-﻿import { ReactNode, useEffect, useState } from "react";
-import { useGetIdentity, useLogout } from "@refinedev/core";
+﻿import { useState, useEffect, ReactNode } from "react";
+import { Outlet, useLocation } from "react-router";
 import { AdminMenu } from "../menu";
 
 interface LayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) {
-  const { data: identity } = useGetIdentity<{ name: string; email: string }>();
-  const { mutate: logout } = useLogout();
-  const [role, setRole] = useState<string>("");
+export function Layout({ children }: LayoutProps = {}) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    import("../../providers/supabase-client").then(({ supabaseClient }) => {
-      supabaseClient.auth.getSession().then(({ data: { session } }) => {
-        if (!session) return;
-        try {
-          const payload = JSON.parse(atob(session.access_token.split(".")[1]));
-          setRole(payload.app_metadata?.user_role ?? "moderator");
-        } catch {
-          setRole("moderator");
-        }
-      });
-    });
-  }, []);
+    setSidebarOpen(false);
+  }, [location.pathname]);
 
-  const initials = (identity?.name ?? "AD").slice(0, 2).toUpperCase();
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [sidebarOpen]);
 
   return (
-    <div className="admin-layout">
+    <div className={`admin-layout ${sidebarOpen ? "admin-layout--sidebar-open" : ""}`}>
+      <div
+        className="admin-sidebar-backdrop"
+        onClick={() => setSidebarOpen(false)}
+        aria-hidden="true"
+      />
+
       <aside className="admin-sidebar">
         <div className="admin-sidebar__logo">
           <div className="admin-sidebar__logo-mark">S2</div>
@@ -36,29 +40,37 @@ export function Layout({ children }: LayoutProps) {
             Skillme<span>2</span>
           </div>
         </div>
-
-        <div className="admin-sidebar__section-label">Management</div>
-        <AdminMenu />
+        <AdminMenu onNavigate={() => setSidebarOpen(false)} />
       </aside>
 
       <div className="admin-main">
         <header className="admin-topbar">
-          <div className="admin-topbar__title">Skillme2 Admin Console</div>
+          <button
+            className="admin-topbar__hamburger"
+            onClick={() => setSidebarOpen(o => !o)}
+            aria-label="Toggle sidebar"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M3 6h18M3 12h18M3 18h18" />
+            </svg>
+          </button>
+
+          <div className="admin-topbar__title">Skillme2 Admin</div>
+
           <div className="admin-topbar__actions">
             <div className="admin-topbar__user">
-              <div className="admin-topbar__avatar">{initials}</div>
-              <div>
-                <div className="admin-topbar__name">{identity?.name ?? "Admin"}</div>
-                <div className="admin-topbar__role">{role.replace("_", " ")}</div>
+              <div className="admin-topbar__avatar">SA</div>
+              <div className="admin-topbar__identity">
+                <div className="admin-topbar__name">Super Admin</div>
+                <div className="admin-topbar__role">Super Admin</div>
               </div>
             </div>
-            <button className="btn btn--ghost" onClick={() => logout()}>
-              Sign out
-            </button>
           </div>
         </header>
 
-        <main className="admin-content">{children}</main>
+        <main className="admin-content">
+          {children ?? <Outlet />}
+        </main>
       </div>
     </div>
   );

@@ -55,9 +55,7 @@ function App() {
             <Route
               element={
                 <Authenticated key="authenticated" fallback={<Login />}>
-                  <Layout>
-                    <Outlet />
-                  </Layout>
+                  <Layout />
                 </Authenticated>
               }
             >

@@ -1141,3 +1141,261 @@ input, select, textarea { font-family: inherit; outline: none; }
   transform: translateX(20px);
   background: var(--bg-deep);
 }
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Hamburger — hidden on desktop */
+.admin-topbar__hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.admin-topbar__hamburger:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* Backdrop — only active on tablet/mobile */
+.admin-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 90;
+  animation: fadeIn 0.15s ease;
+}
+
+/* ---------- TABLET: 768px – 1023px ---------- */
+@media (max-width: 1023px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    max-width: 85vw;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .admin-layout--sidebar-open .admin-sidebar {
+    transform: translateX(0);
+  }
+
+  .admin-layout--sidebar-open .admin-sidebar-backdrop {
+    display: block;
+  }
+
+  .admin-topbar__hamburger {
+    display: flex;
+  }
+
+  .admin-topbar {
+    padding: 0 1.25rem;
+  }
+
+  .admin-content {
+    padding: 1.5rem;
+  }
+
+  /* Drawers narrower on tablet */
+  .admin-drawer {
+    width: 420px;
+  }
+
+  /* Tables allow horizontal scroll */
+  .admin-table-wrap {
+    overflow-x: auto;
+  }
+}
+
+/* ---------- MOBILE: < 768px ---------- */
+@media (max-width: 767px) {
+  .admin-topbar {
+    height: 56px;
+    padding: 0 0.85rem;
+    gap: 0.5rem;
+  }
+
+  .admin-topbar__title {
+    font-size: 0.875rem;
+    flex: 1;
+  }
+
+  .admin-topbar__identity {
+    display: none;
+  }
+
+  .admin-content {
+    padding: 1rem 0.85rem 1.5rem;
+  }
+
+  /* Page header stacks */
+  .page-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .page-head__title {
+    font-size: 1.25rem;
+  }
+  .page-head__sub {
+    font-size: 0.82rem;
+  }
+  .page-head__actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .page-head__actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Filters stack */
+  .admin-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    padding: 0.85rem;
+  }
+  .admin-filter-search {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .admin-filter-group {
+    flex-wrap: wrap;
+  }
+  .admin-filter-chip {
+    font-size: 0.72rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  /* Bulk bar stacks */
+  .admin-bulk-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+  .admin-bulk-bar__actions {
+    flex-wrap: wrap;
+  }
+  .admin-bulk-bar__actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  /* Stat grids single-column */
+  .ops-grid--1,
+  .ops-grid--2,
+  .ops-grid--4,
+  .ops-grid--6 {
+    grid-template-columns: 1fr;
+  }
+
+  .ops-stat__value {
+    font-size: 1.25rem;
+  }
+
+  /* Drawers become full-screen */
+  .admin-drawer {
+    width: 100vw;
+    max-width: 100vw;
+    border-left: none;
+  }
+
+  .admin-drawer__body {
+    padding: 1rem 1.15rem 1.5rem;
+  }
+
+  .admin-drawer__grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Modals become full-screen */
+  .admin-modal {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    top: 0;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Table: allow horizontal scroll and reduce padding */
+  .admin-table {
+    min-width: 640px;
+  }
+  .admin-table thead th {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.62rem;
+  }
+  .admin-table tbody td {
+    padding: 0.85rem 0.85rem;
+    font-size: 0.82rem;
+  }
+
+  /* Pagination stacks */
+  .admin-pagination {
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  /* Settings fields single column */
+  .settings-grid--2,
+  .settings-grid--3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Toast full-width */
+  .admin-toast {
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    bottom: 1rem;
+    width: auto;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Menu item touch targets */
+  .admin-menu__item {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ---------- VERY SMALL: < 400px ---------- */
+@media (max-width: 399px) {
+  .admin-content {
+    padding: 0.85rem 0.65rem 1.25rem;
+  }
+  .page-head__title {
+    font-size: 1.1rem;
+  }
+  .admin-topbar__title {
+    font-size: 0.8rem;
+  }
+}

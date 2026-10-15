@@ -56,7 +56,7 @@ const LABELS: Record<string, string> = {
   reviews: "Reviews",
 };
 
-export function AdminMenu() {
+export function AdminMenu({ onNavigate }: { onNavigate?: () => void } = {}) {
   const { menuItems } = useMenu();
   const location = useLocation();
 
@@ -69,7 +69,7 @@ export function AdminMenu() {
         return (
           <Link
             key={name}
-            to={item.route ?? "/"}
+            to={item.route ?? "/"} onClick={onNavigate}
             className={`admin-menu__item ${isActive ? "is-active" : ""}`}
           >
             {ICONS[name] ?? (
@@ -84,3 +84,6 @@ export function AdminMenu() {
     </nav>
   );
 }
+
+// Alias so `import { Menu } from "../menu"` also works
+export { AdminMenu as Menu };
