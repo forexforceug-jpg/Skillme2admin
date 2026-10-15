@@ -61,23 +61,27 @@ export function VerificationDrawer({ requestId, onClose, onUpdated }: Props) {
     }
     setRequest(v as Verification);
 
-    const tasks = [] as Promise<any>[];
+    const tasks: Array<Promise<void>> = [];
     if (v.teacher_id) {
       tasks.push(
-        supabaseClient.from("profiles")
-          .select("id,name,email,avatar_url,is_teacher,verification,likes_count,lessons_taught")
-          .eq("id", v.teacher_id)
-          .maybeSingle()
-          .then(res => { if (res.data) setTeacher(res.data as Teacher); })
+        (async () => {
+          const res = await supabaseClient.from("profiles")
+            .select("id,name,email,avatar_url,is_teacher,verification,likes_count,lessons_taught")
+            .eq("id", v.teacher_id)
+            .maybeSingle();
+          if (res.data) setTeacher(res.data as Teacher);
+        })()
       );
     }
     if (v.reviewed_by) {
       tasks.push(
-        supabaseClient.from("profiles")
-          .select("id,name,email")
-          .eq("id", v.reviewed_by)
-          .maybeSingle()
-          .then(res => { if (res.data) setReviewer(res.data as Reviewer); })
+        (async () => {
+          const res = await supabaseClient.from("profiles")
+            .select("id,name,email")
+            .eq("id", v.reviewed_by)
+            .maybeSingle();
+          if (res.data) setReviewer(res.data as Reviewer);
+        })()
       );
     }
     await Promise.all(tasks);

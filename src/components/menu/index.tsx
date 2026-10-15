@@ -1,7 +1,8 @@
-﻿import { useMenu } from "@refinedev/core";
+﻿import React from "react";
+import { useMenu } from "@refinedev/core";
 import { Link, useLocation } from "react-router";
 
-const ICONS: Record<string, JSX.Element> = {
+const ICONS: Record<string, React.ReactElement> = {
   profiles: (
     <svg className="admin-menu__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="8" r="4" /><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
